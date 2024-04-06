@@ -1,9 +1,3 @@
-def packageName = "app-devops-package-cicd.war"
-def artifactname = "app-devops-artifact-cicd.jar"
-def version = "1.${BUILD_NUMBER}"
-def semanticVersion = "1.${BUILD_NUMBER}.0"
-def repoName = "pramaraju96/ServiceNow-DevOps-Change-Sample" // Ensure after forking update the repoName accrodingly.
-
 pipeline {
 	agent any
 	
@@ -11,12 +5,7 @@ pipeline {
 		maven 'Maven'
 	}
 
-	environment {
-		//SCANNER_HOME = tool 'sonarScanner'
-		VERACODE_APPLICATION_NAME = 'ServiceNow DevOps App#1' //Ensure you update the correct Application name
-		VERACODE_SCANNER_NAME = 'Veracode'
-	} 
-
+	
 	stages {
 		stage('Build') {
 			steps {
@@ -35,60 +24,7 @@ pipeline {
 				}
 			}
 		}
-		/*
-		stage('Register Artifact') {
-			steps {
-				snDevOpsArtifact(artifactsPayload: """
-				{
-				"artifacts":
-				[
-				    {
-				        "name": "${artifactname}",
-				        "version": "${version}",
-				        "semanticVersion": "${semanticVersion}",
-				        "repositoryName": "${repoName}"
-				    }
-				],
-				"branchName": "main"
-				}""")
-			}     
-		}
-		*/
-		
-		stage('Sonar Scan') {
-			steps {
-				sonarSummaries()
-			}
-		}
-
-		/*
-		stage('Security Scan') {
-			steps {
-				snDevOpsSecurityResult securityResultAttributes: '{"scanner": "Veracode", "applicationName": "ServiceNow DevOps App#1"}'
-			}
-		}
-
-		stage('Register Package') {
-			steps {
-				snDevOpsPackage(
-				name: "${packageName}",
-				artifactsPayload: """
-				{
-				    "artifacts":
-				    [
-				        {
-				            "name": "${artifactname}",
-				            "version": "${version}",
-				            "semanticVersion": "${semanticVersion}",
-				            "repositoryName": "${repoName}"
-				        }
-				    ],
-				    "branchName": "main"
-				}""")
-			}
-		}
-		*/
-		  
+		/*  
 		stage('Change') {
 			steps {
 			    snDevOpsChange(changeRequestDetails: '''
@@ -118,15 +54,8 @@ pipeline {
 				echo "Deploying the change..."
 			}
 		}
+*/
 	}
 }
 
-def sonarSummaries() {
-	withSonarQubeEnv(installationName: 'ramasonarcloud'){
-		sh 'mvn clean verify sonar:sonar \
-		    -Dsonar.login=abdcefghijklmnopqrstuvwxyz1234567890 \
-		    -Dsonar.host.url=https://sonarcloud.io \
-		    -Dsonar.organization=<sonar-cloud-org-name> \
-		    -Dsonar.projectKey=<sonar-cloud-project-key>'
-    }
-}
+
