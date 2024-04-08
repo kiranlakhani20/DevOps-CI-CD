@@ -20,7 +20,7 @@ pipeline {
 			}
 			post {
 				always {
-					nunit testResultsPattern: 'NUnitTestPipelineKL/target/test-reports/*.xml'
+					nunit testResultsPattern: 'NUnitTestPipelineKL.xml'
 				}
 			}
 		}
